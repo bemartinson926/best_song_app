@@ -32,9 +32,4 @@ ActiveRecord::Schema.define(version: 20150519190310) do
     t.integer  "artist_id"
   end
 
-  create_table "votes", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
 end
