@@ -17,10 +17,10 @@ ___
 ```
 $ rails g controller Artists
 ```
-- This will create a new file in app/controllers/artists.rb
+- This will create a new file in app/controllers/artists_controller.rb
 
 ##### In order to return something to the browser, we need to create an action (method) inside the controller. Start with the index action that by convention will display all artists in our database.  
-- Modify your app/controllers/artists.rb file to look like the following:  
+- Modify your app/controllers/artists_controller.rb file to look like the following:  
 ```ruby
 class ArtistsController < ApplicationController
   def index
@@ -78,7 +78,7 @@ end
 ___
 #### Currently, we can only add artists to our application via Rails console `$ rails console` or `$ rails c`. Let's add functionality to add artists in the browser.
 - First we will create an action in the ArtistsController called new. We will use this to create a new artist instance and render a form.
-- Modify your app/controllers/artists.rb file to look like the following:  
+- Modify your app/controllers/artists_controller.rb file to look like the following:  
 ```ruby
 class ArtistsController < ApplicationController
   def index
@@ -130,7 +130,7 @@ end
 
 ```
 - Notice that I mapped it to an action called create (although it doesn't exist yet). Try filling out the form again and see what Rails tells us. It says we need that action called create so let's CREATE it!
-- Modify your app/controllers/artists.rb file to look like the following:  
+- Modify your app/controllers/artists_controller.rb file to look like the following:  
 ```ruby
 class ArtistsController < ApplicationController
   def index
@@ -175,7 +175,7 @@ We now have the ability to create a new artist and save it to our database, but 
 ___
 #### Let's refactor our create action a little bit.
 We have basic functionality to create an artist and redirect the user back to the index page, but what if the user tries to create and invalid artist?
-- Modify your app/controllers/artists.rb file to look like the following:
+- Modify your app/controllers/artists_controller.rb file to look like the following:
 ```ruby
 class ArtistsController < ApplicationController
   def index
@@ -241,7 +241,7 @@ end
 ___
 #### Let's add functionality to create new songs.
 - First create a SongsController with the following command: `$ rails g controller Songs`
-- Add a new, create, and show action to the SongsController (app/controllers/songs.rb):
+- Add a new, create, and show action to the SongsController (app/controllers/songs_controller.rb):
 ```ruby
 class SongsController < ApplicationController
   def new
@@ -322,3 +322,90 @@ We need to add 2 new view files for our new and show actions.
 </p>
 ```
 ___
+#### We have basic functionality, but we need to tie it together a bit.
+
+Let's create a show action for artists (app/controllers/artists_controller.rb):
+```ruby
+class ArtistsController < ApplicationController
+  def index
+    @artists = Artist.all
+  end
+
+  def show
+    @artist = Artist.find(params[:id])
+  end
+
+  def new
+    @artist = Artist.new
+  end
+
+  def create
+    @artist = Artist.new(artist_params)
+
+    if @artist.save
+      redirect_to artists_path
+    else
+
+      render :new
+    end
+  end
+
+  private
+  def artist_params
+    params.require(:artist).permit(:full_name, :home_town, :current_hairstyle)
+  end
+end
+
+```
+- Modify the routes for artists to be a resource (config/routes.rb):
+```ruby
+Rails.application.routes.draw do
+  root 'artists#index'
+
+  resources :artists
+  resources :songs
+end
+
+```
+- Create a show view for artists (app/views/artists/show.html.erb):
+```ruby
+<p>
+  <strong>Name:</strong>
+  <%= @artist.full_name %>
+</p>
+
+<p>
+  <strong>Hometown:</strong>
+  <%= @artist.home_town %>
+</p>
+
+<p>
+  <strong>Current Hairstyle:</strong>
+  <%= @artist.current_hairstyle %>
+</p>
+
+<p>
+  <strong>Songs:</strong>
+  <ul>
+    <% @artist.songs.each do |song| %>
+      <li><%= link_to song.title, song_path(song) %></li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Back', artists_path %>
+```
+- Add a link to each artist on the artists index page (app/views/artists/index.html.erb):
+```ruby
+<%= link_to 'Add a new artist', new_artist_path %>
+<h2>Current Artists:</h2>
+<ul>
+  <% @artists.each do |artist| %>
+    <li>
+      <%= link_to artist.full_name, artist_path(artist) %>
+      <%= artist.home_town %>
+      <%= artist.current_hairstyle %>
+    </li>
+  <% end %>
+<ul>
+```
