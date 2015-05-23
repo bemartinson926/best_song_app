@@ -239,3 +239,88 @@ end
 <% end %>
 ```
 ___
+#### Let's add functionality to create new songs.
+- First create a SongsController with the following command: `$ rails g controller Songs`
+- Add a new, create, and show action to the SongsController (app/controllers/songs.rb):
+```ruby
+class SongsController < ApplicationController
+  def new
+    @song = Song.new
+    @artists = Artist.all
+  end
+
+  def show
+    @song = Song.find(params[:id])
+  end
+
+  def create
+    @song = Song.new(song_params)
+
+    if @song.save
+      redirect_to @song
+    else
+      render :new
+    end
+  end
+
+  private
+  def song_params
+    params.require(:song).permit(:title, :optimal_volume, :artist_id)
+  end
+end
+
+```
+- The show action is used to present a single song. In our create action inside our if statement, where we have `redirect_to @song` it will redirect to the show action and display the song that was just created.
+- We need to add routes for our new actions in the SongsController, but this time we will create a resource route that will provide routes for index, create, new, edit, show, update, and destroy (config/routes.rb):
+```ruby
+Rails.application.routes.draw do
+  root 'artists#index'
+  get 'artists', to: 'artists#index'
+  get 'artists/new', to: 'artists#new'
+  post 'artists', to: 'artists#create'
+
+  resources :songs
+end
+
+```
+- You can see your routes by running `$ rake routes` or routes specific to songs with `$ rake routes | grep songs`
+
+We need to add 2 new view files for our new and show actions.
+- Create the following file (app/views/songs/new.html.erb):
+```ruby
+<h2>Add a new song</h2>
+<%= form_for(@song) do |f| %>
+
+  <%= f.label :title %>
+  <%= f.text_field :title %><br>
+
+  <%= f.label :optimal_volume %>
+  <%= f.text_field :optimal_volume %><br>
+  
+  <% artists = @artists.map { |artist| [artist['full_name'], artist['id']] } %>
+  <%= f.label :artist %>
+  <%= f.select(:artist_id, options_for_select(artists)) %><br >
+
+  <%= f.submit %>
+<% end %>
+```
+- Create the following file (app/views/songs/show.html.erb):
+```ruby
+<p>
+  <strong>Title:</strong>
+  <%= @song.title %>
+</p>
+
+<p>
+  <strong>Optimal Volume:</strong>
+  <%= @song.optimal_volume %>
+</p>
+
+<p>
+  <strong>Song's Artist:</strong>
+  <%= @song.artist.full_name %>
+</p>
+
+<%= link_to 'Back', songs_path %>
+```
+___
