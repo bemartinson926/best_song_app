@@ -409,3 +409,54 @@ end
   <% end %>
 <ul>
 ```
+___
+#### A few more connections.
+- Add a link from artist show page to create new song (app/views/artists/show.html.erb):
+```ruby
+<p>
+  <strong>Name:</strong>
+  <%= @artist.full_name %>
+</p>
+
+<p>
+  <strong>Hometown:</strong>
+  <%= @artist.home_town %>
+</p>
+
+<p>
+  <strong>Current Hairstyle:</strong>
+  <%= @artist.current_hairstyle %>
+</p>
+
+<p>
+  <strong>Songs:</strong>
+  <ul>
+    <% @artist.songs.each do |song| %>
+      <li><%= link_to song.title, song_path(song) %></li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Add new song', new_song_path %><br >
+<%= link_to 'Back', artists_path %>
+```
+- Add links from song show page to navigate back to song's artist page or artists index page (app/views/songs/show.html.erb):
+```ruby
+<p>
+  <strong>Title:</strong>
+  <%= @song.title %>
+</p>
+
+<p>
+  <strong>Optimal Volume:</strong>
+  <%= @song.optimal_volume %>
+</p>
+
+<p>
+  <strong>Song's Artist:</strong>
+  <%= @song.artist.full_name %>
+</p>
+
+<%= link_to 'Artist', artist_path(@song.artist) %><br >
+<%= link_to 'All Artists', artists_path %>
+```
