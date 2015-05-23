@@ -1,9 +1,9 @@
-<%= link_to 'Add a new artist', artists_new_path %>
+<%= link_to 'Add a new artist', new_artist_path %>
 <h2>Current Artists:</h2>
 <ul>
   <% @artists.each do |artist| %>
     <li>
-      <%= artist.full_name %>
+      <%= link_to artist.full_name, artist_path(artist) %>
       <%= artist.home_town %>
       <%= artist.current_hairstyle %>
     </li>

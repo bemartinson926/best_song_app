@@ -1,0 +1,25 @@
+<p>
+  <strong>Name:</strong>
+  <%= @artist.full_name %>
+</p>
+
+<p>
+  <strong>Hometown:</strong>
+  <%= @artist.home_town %>
+</p>
+
+<p>
+  <strong>Current Hairstyle:</strong>
+  <%= @artist.current_hairstyle %>
+</p>
+
+<p>
+  <strong>Songs:</strong>
+  <ul>
+    <% @artist.songs.each do |song| %>
+      <li><%= link_to song.title, song_path(song) %></li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Back', artists_path %>
