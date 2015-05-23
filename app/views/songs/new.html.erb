@@ -1,0 +1,15 @@
+<h2>Add a new song</h2>
+<%= form_for(@song) do |f| %>
+
+  <%= f.label :title %>
+  <%= f.text_field :title %><br>
+
+  <%= f.label :optimal_volume %>
+  <%= f.text_field :optimal_volume %><br>
+  
+  <% artists = @artists.map { |artist| [artist['full_name'], artist['id']] } %>
+  <%= f.label :artist %>
+  <%= f.select(:artist_id, options_for_select(artists)) %><br >
+
+  <%= f.submit %>
+<% end %>
