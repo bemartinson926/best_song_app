@@ -173,3 +173,69 @@ We now have the ability to create a new artist and save it to our database, but 
 <ul>
 ```
 ___
+#### Let's refactor our create action a little bit.
+We have basic functionality to create an artist and redirect the user back to the index page, but what if the user tries to create and invalid artist?
+- Modify your app/controllers/artists.rb file to look like the following:
+```ruby
+class ArtistsController < ApplicationController
+  def index
+    @artists = Artist.all
+  end
+
+  def new
+    @artist = Artist.new
+  end
+
+  def create
+    @artist = Artist.new(artist_params)
+
+    if @artist.save
+      redirect_to artists_path
+    else
+      render :new
+    end
+  end
+
+  private
+  def artist_params
+    params.require(:artist).permit(:full_name, :home_town, :current_hairstyle)
+  end
+end
+
+```
+Now if a tries to create an invalid artist, the form will be rendered again.
+
+- We can test this by adding an Active Record Validation to our Artist model. We want our artists to have a name at the very least.
+- Modify the file app/models/artist.rb to look like the following:
+```ruby
+class Artist < ActiveRecord::Base
+  has_many :songs
+
+  validates :full_name, presence: true
+end
+
+```
+- This will return an error if a full_name is not entered. We can display this error to the user by adding them to the view file. More Active Record Validations can be found [here](http://guides.rubyonrails.org/active_record_validations.html).
+- Modify your app/views/artists/new.html.erb file:
+```ruby
+<h2>Add a new artist</h2>
+<%= form_for(@artist) do |f| %>
+  <div>
+    <% @artist.errors.full_messages.each do |message| %>
+      <li style="color: Red"><%= message %></li>
+    <% end %>
+  </div><br >
+
+  <%= f.label :full_name %>
+  <%= f.text_field :full_name %><br>
+
+  <%= f.label :home_town %>
+  <%= f.text_field :home_town %><br>
+
+  <%= f.label :current_hairstyle %>
+  <%= f.text_field :current_hairstyle %><br>
+
+  <%= f.submit %>
+<% end %>
+```
+___
