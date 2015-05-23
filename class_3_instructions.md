@@ -320,7 +320,5 @@ We need to add 2 new view files for our new and show actions.
   <strong>Song's Artist:</strong>
   <%= @song.artist.full_name %>
 </p>
-
-<%= link_to 'Back', songs_path %>
 ```
 ___
