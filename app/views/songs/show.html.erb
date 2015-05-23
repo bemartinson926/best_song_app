@@ -12,3 +12,6 @@
   <strong>Song's Artist:</strong>
   <%= @song.artist.full_name %>
 </p>
+
+<%= link_to 'Artist', artist_path(@song.artist) %><br >
+<%= link_to 'All Artists', artists_path %>
