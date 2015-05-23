@@ -1,8 +1,11 @@
 Class 3 Instructions
 ==============
 
-##### If you would like to start from where we left off after class 2 you can clone the repo into your local directory  
-via ssh (preferred):
+##### Below are the instructions for what we covered during Class 3 as well as what we didn't finish to be prepared for Class 4.
+
+- Clone the repo into your local directory:
+
+via ssh:
 ```
 $ git@github.com:bemartinson926/best_song_app.git
 ```
@@ -11,6 +14,16 @@ via https:
 ```
 $ https://github.com/bemartinson926/best_song_app.git
 ```
+
+- cd into the repo `$ cd best_song_app`
+
+- Ensure that you have all of the branches by running `$ git fetch`
+
+- Start from where Class 2 finished by running `$ git checkout class_2`. This will checkout the class_2 branch.
+
+- Create a new branch (my_class_3) off of the class_2 branch to complete the Class 3 instructions below `$ git checkout -b my_class_3`
+
+- Follow the instructions below.
 ___
 
 #### Create an Artists controller with the following command:  
