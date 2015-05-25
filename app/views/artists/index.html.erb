@@ -1,11 +1,14 @@
 <%= link_to 'Add a new artist', new_artist_path %>
 <h2>Current Artists:</h2>
-<ul>
+<table>
+  <th>Name</th>
+  <th>Hometown</th>
+  <th>Current Hairstyle</th>
   <% @artists.each do |artist| %>
-    <li>
-      <%= link_to artist.full_name, artist_path(artist) %>
-      <%= artist.home_town %>
-      <%= artist.current_hairstyle %>
-    </li>
+    <tr>
+      <td><%= link_to artist.full_name, artist_path(artist) %></td>
+      <td><%= artist.home_town %></td>
+      <td><%= artist.current_hairstyle %></td>
+    <tr>
   <% end %>
-<ul>
+</table>
