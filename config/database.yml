@@ -80,6 +80,8 @@ test:
 #
 production:
   <<: *default
-  database: best_song_app_production
-  username: best_song_app
-  password: <%= ENV['BEST_SONG_APP_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  database: db/production
+  # database: best_song_app_production
+  # username: best_song_app
+  # password: <%= ENV['BEST_SONG_APP_DATABASE_PASSWORD'] %>
